@@ -109,4 +109,34 @@ document.addEventListener('DOMContentLoaded', function () {
             expenseForm.querySelector('button[type="submit"]').textContent = "Update Expense";
         }
     });
+
+    // ===== Export to CSV Functionality =====
+    function exportTableToCSV(filename) {
+        const rows = document.querySelectorAll("#expenseTableBody tr");
+        let csv = "Date,Description,Category,Amount\n";
+        rows.forEach(row => {
+            const cells = row.querySelectorAll("td");
+            const rowData = [
+                cells[0]?.textContent,
+                cells[1]?.textContent,
+                cells[2]?.textContent,
+                cells[3]?.textContent.replace('$','')
+            ].map(val => `"${val}"`).join(",");
+            csv += rowData + "\n";
+        });
+
+        const blob = new Blob([csv], { type: "text/csv" });
+        const link = document.createElement("a");
+        link.href = window.URL.createObjectURL(blob);
+        link.download = filename;
+        link.click();
+    }
+
+    // Attach event listener to the Export button
+    const exportBtn = document.getElementById('exportCsvBtn');
+    if (exportBtn) {
+        exportBtn.addEventListener('click', function () {
+            exportTableToCSV('expenses.csv');
+        });
+    }
 });
