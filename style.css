@@ -1,0 +1,119 @@
+/* GENERAL APP BG OVERRIDE */
+body.bg-light {
+    background: #e9ecef !important;
+}
+
+.card {
+    border-radius: 1rem !important;
+    box-shadow: 0 2px 18px rgba(80,80,80,0.07);
+    border: none;
+}
+
+.card-title {
+    font-family: 'Inter', 'Roboto', Arial, sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.form-label {
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+
+.form-control {
+    border-radius: 7px !important;
+    border: 1px solid #bdbdbd !important;
+    font-size: 1.06em;
+    background: #f8fafb !important;
+    transition: border-color 0.18s;
+}
+
+.form-control:focus {
+    border-color: #4287f5 !important;
+    background: #fff !important;
+    box-shadow: 0 0 0 2px #9dc2f9 !important;
+}
+
+.form-text {
+    color: #79828d;
+    font-size: 0.93em;
+    margin-bottom: 0.2rem;
+}
+
+.btn-primary, .btn-outline-primary {
+    border-radius: 7px !important;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.btn-primary {
+    background: #3a5ad9;
+    border-color: #3a5ad9;
+}
+
+.btn-primary:hover {
+    background: #23398c;
+    border-color: #23398c;
+}
+
+.btn-outline-secondary {
+    border-radius: 7px !important;
+    font-weight: 500;
+    color: #7267ef;
+    border-color: #7267ef;
+}
+
+.btn-outline-secondary:hover {
+    background: #7267ef;
+    color: #fff;
+    border-color: #554bb4;
+}
+
+.btn-outline-danger {
+    border-radius: 7px !important;
+    font-weight: 500;
+    color: #ea5455;
+    border-color: #ea5455;
+}
+
+.btn-outline-danger:hover {
+    background: #ea5455;
+    color: #fff;
+    border-color: #be3e40;
+}
+
+/* Table styling for clean, modern look */
+.table {
+    background: #fff;
+    border-radius: 1rem;
+    margin-bottom: 0;
+    overflow: hidden;
+}
+
+.table th, .table td {
+    vertical-align: middle !important;
+    padding: 12px 10px !important;
+}
+
+.table th {
+    background: #f5e784 !important;
+    color: #3a3a3a !important;
+    border-bottom: 2px solid #e0e0e0 !important;
+    font-weight: 700;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background: #fafaf6 !important;
+}
+
+/* Actions column alignment */
+.table td:last-child {
+    min-width: 120px;
+}
+
+/* Responsive padding for smaller screens */
+@media (max-width: 991px) {
+    .card {
+        margin-bottom: 1.2rem;
+    }
+}
