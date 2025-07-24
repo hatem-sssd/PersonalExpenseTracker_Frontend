@@ -24,8 +24,21 @@
             justify-content: center;
             overflow: hidden;
         }
+        /* Pie Chart Container */
+        .pie-chart-container {
+            max-width: 320px;
+            margin: 0 auto 1.5rem auto;
+        }
+        #expensePieChart {
+            width: 100% !important;
+            height: 220px !important;
+            max-width: 320px;
+            max-height: 220px;
+        }
         @media (max-width: 400px) {
             .banner-hero { height: 100px; }
+            .pie-chart-container { max-width: 220px; }
+            #expensePieChart { max-width: 220px; height: 140px !important;}
         }
     </style>
 </head>
@@ -84,8 +97,8 @@
                             <button id="exportCsvBtn" class="btn btn-success">Export to CSV</button>
                         </div>
                         <!-- Pie Chart Section -->
-                        <div class="mb-4 text-center">
-                            <canvas id="expensePieChart" width="350" height="100"></canvas>
+                        <div class="pie-chart-container mb-4 text-center">
+                            <canvas id="expensePieChart" width="320" height="220"></canvas>
                         </div>
                         <div class="table-responsive">
                             <table class="table table-striped align-middle">
