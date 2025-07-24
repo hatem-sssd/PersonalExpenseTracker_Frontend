@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // ====== CONFIG: YOUR BACKEND URL HERE ======
+  
     const API_URL = "https://personalexpensetracker-backend-19wf.onrender.com/expenses";
 
     const expenseForm = document.getElementById('expenseForm');
