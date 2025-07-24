@@ -1,11 +1,42 @@
 document.addEventListener('DOMContentLoaded', function () {
-  
     const API_URL = "https://personalexpensetracker-backend-19wf.onrender.com/expenses";
 
     const expenseForm = document.getElementById('expenseForm');
     const table = document.getElementById('expenseTableBody');
     let editingRow = null;
     let editingId = null;
+    let expensesArray = [];
+    let chart = null;
+
+    // Pie Chart Rendering Function
+    function renderPieChart(expenses) {
+        const categoryTotals = {};
+        expenses.forEach(exp => {
+            if (!exp.category) return;
+            categoryTotals[exp.category] = (categoryTotals[exp.category] || 0) + Number(exp.amount);
+        });
+        const labels = Object.keys(categoryTotals);
+        const data = Object.values(categoryTotals);
+
+        // If chart exists, destroy before re-render
+        if (chart) chart.destroy();
+
+        chart = new Chart(document.getElementById('expensePieChart'), {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: [
+                        '#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b', '#858796', '#2e59d9'
+                    ],
+                }]
+            },
+            options: {
+                plugins: { legend: { position: 'right' } }
+            }
+        });
+    }
 
     // Helper function: render a row
     function addRow(expense) {
@@ -25,13 +56,18 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ===== Load existing expenses on page load =====
-    fetch(API_URL)
-        .then(res => res.json())
-        .then(expenses => {
-            table.innerHTML = ""; // Clear existing
-            expenses.forEach(exp => addRow(exp));
-        })
-        .catch(() => alert("Could not fetch expenses from backend!"));
+    function fetchAndRenderExpenses() {
+        fetch(API_URL)
+            .then(res => res.json())
+            .then(expenses => {
+                expensesArray = expenses;
+                table.innerHTML = ""; // Clear existing
+                expenses.forEach(exp => addRow(exp));
+                renderPieChart(expensesArray);
+            })
+            .catch(() => alert("Could not fetch expenses from backend!"));
+    }
+    fetchAndRenderExpenses();
 
     // ===== Add or Update Expense =====
     expenseForm.addEventListener('submit', function (e) {
@@ -57,6 +93,9 @@ document.addEventListener('DOMContentLoaded', function () {
             })
                 .then(res => res.json())
                 .then(updated => {
+                    // Update local array
+                    const idx = expensesArray.findIndex(x => x._id === editingId);
+                    if (idx !== -1) expensesArray[idx] = updated;
                     editingRow.children[0].textContent = updated.date ? updated.date.substring(0, 10) : '';
                     editingRow.children[1].textContent = updated.description;
                     editingRow.children[2].textContent = updated.category;
@@ -64,6 +103,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     editingRow = null;
                     editingId = null;
                     expenseForm.querySelector('button[type="submit"]').textContent = "Add Expense";
+                    renderPieChart(expensesArray);
                 })
                 .catch(() => alert("Error updating expense on backend!"));
         } else {
@@ -76,6 +116,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(res => res.json())
                 .then(newExp => {
                     addRow(newExp);
+                    expensesArray.push(newExp);
+                    renderPieChart(expensesArray);
                 })
                 .catch(() => alert("Error adding expense to backend!"));
         }
@@ -89,7 +131,12 @@ document.addEventListener('DOMContentLoaded', function () {
             const row = e.target.closest('tr');
             const id = row.dataset.id;
             fetch(`${API_URL}/${id}`, { method: 'DELETE' })
-                .then(() => row.remove())
+                .then(() => {
+                    row.remove();
+                    // Remove from array
+                    expensesArray = expensesArray.filter(exp => exp._id !== id);
+                    renderPieChart(expensesArray);
+                })
                 .catch(() => alert("Error deleting expense from backend!"));
             if (editingRow === row) {
                 expenseForm.reset();
